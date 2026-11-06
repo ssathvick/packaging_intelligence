@@ -1,0 +1,27 @@
+[Unit]
+Description=Packaging Intelligence application and document worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=packaging
+Group=packaging
+WorkingDirectory=/opt/packaging_intelligence
+EnvironmentFile=/etc/packaging-intelligence.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/packaging_intelligence/.venv/bin/python -m uvicorn backend.main:app --host 127.0.0.1 --port 8015 --workers 1 --no-proxy-headers --no-access-log
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/packaging-intelligence
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=4G
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target

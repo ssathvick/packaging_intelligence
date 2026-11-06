@@ -1,0 +1,17 @@
+[Unit]
+Description=Verified Packaging Intelligence data backup
+
+[Service]
+Type=oneshot
+User=packaging
+Group=packaging
+WorkingDirectory=/opt/packaging_intelligence
+EnvironmentFile=/etc/packaging-intelligence.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/packaging_intelligence/.venv/bin/python ops/backup.py create /var/backups/packaging-intelligence
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/packaging-intelligence /var/backups/packaging-intelligence
